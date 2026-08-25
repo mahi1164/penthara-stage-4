@@ -12,8 +12,10 @@ function CurrencySection() {
   const [ratesRetry, setRatesRetry] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-
   const normalizedSearch = debouncedSearchTerm.trim().toLowerCase();
+  const [amount, setAmount] = useState("1");
+  const [sourceCurrency, setSourceCurrency] = useState("USD");
+  const [targetCurrency, setTargetCurrency] = useState("EUR");
 
 const filteredRates = Object.entries(rates).filter(
   ([code]) => {
@@ -25,6 +27,30 @@ const filteredRates = Object.entries(rates).filter(
     );
   }
 );
+
+const numericAmount = Number(amount);
+
+const sourceRate =
+  sourceCurrency === baseCurrency
+    ? 1
+    : rates[sourceCurrency];
+
+const targetRate =
+  targetCurrency === baseCurrency
+    ? 1
+    : rates[targetCurrency];
+
+let convertedAmount = null;
+
+if (
+  Number.isFinite(numericAmount) &&
+  numericAmount >= 0 &&
+  sourceRate &&
+  targetRate
+) {
+  convertedAmount =
+    (numericAmount * targetRate) / sourceRate;
+}
 
   const loadCurrencies = async () => {
     setLoading(true);
@@ -157,6 +183,82 @@ useEffect(() => {
     onChange={(event) => setSearchTerm(event.target.value)}
     placeholder="Search by code or name"
   />
+</div>
+
+<div className="currency-converter">
+  <h3>Currency Converter</h3>
+
+  <div className="converter-row">
+    <label htmlFor="converter-amount">
+      Amount
+    </label>
+
+    <input
+      id="converter-amount"
+      type="number"
+      min="0"
+      step="any"
+      value={amount}
+      onChange={(event) => setAmount(event.target.value)}
+    />
+  </div>
+
+  <div className="converter-row">
+    <label htmlFor="source-currency">
+      From
+    </label>
+
+    <select
+      id="source-currency"
+      value={sourceCurrency}
+      onChange={(event) => setSourceCurrency(event.target.value)}
+    >
+      {currencyEntries.map(([code, name]) => (
+        <option key={code} value={code}>
+          {code} — {name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <button
+    type="button"
+    onClick={() => {
+      setSourceCurrency(targetCurrency);
+      setTargetCurrency(sourceCurrency);
+    }}
+  >
+    Swap
+  </button>
+
+  <div className="converter-row">
+    <label htmlFor="target-currency">
+      To
+    </label>
+
+    <select
+      id="target-currency"
+      value={targetCurrency}
+      onChange={(event) => setTargetCurrency(event.target.value)}
+    >
+      {currencyEntries.map(([code, name]) => (
+        <option key={code} value={code}>
+          {code} — {name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className="conversion-result">
+    {convertedAmount === null ? (
+      <p>Enter a valid amount and wait for rates to load.</p>
+    ) : (
+      <p>
+        {numericAmount} {sourceCurrency} ={" "}
+        {convertedAmount.toFixed(2)} {targetCurrency}
+      </p>
+    )}
+  </div>
 </div>
 
     {ratesLoading ? (
