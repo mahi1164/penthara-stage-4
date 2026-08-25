@@ -124,6 +124,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [activeView, setActiveView] = useState("expenses");
 
   useEffect(() => {
   const timer = setTimeout(() => {
@@ -310,6 +311,24 @@ categories.forEach((category) => {
   <div className="app">
 
     <Header />
+    <div className="view-switcher">
+  <button
+    type="button"
+    onClick={() => setActiveView("expenses")}
+  >
+    Expenses
+  </button>
+
+  <button
+    type="button"
+    onClick={() => setActiveView("currencies")}
+  >
+    Currencies
+  </button>
+</div>
+{activeView === "expenses" && (
+  <>
+      <></>
 
     <CategorySettings
   categories={categories}
@@ -427,7 +446,15 @@ categories.forEach((category) => {
     </button>
   </div>
 )}
+</>
+    )}
 
+  {activeView === "currencies" && (
+  <section className="currency-section">
+    <h2>Currencies</h2>
+    <p>Currency data will appear here.</p>
+  </section>
+)}
 
   </div>
 );
