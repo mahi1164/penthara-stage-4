@@ -9,3 +9,15 @@ export async function fetchCurrencies() {
 
   return response.json();
 }
+
+export async function fetchLatestRates(baseCurrency) {
+  const response = await fetch(
+    `${API_BASE_URL}/v1/latest?base=${encodeURIComponent(baseCurrency)}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch exchange rates.");
+  }
+
+  return response.json();
+}
