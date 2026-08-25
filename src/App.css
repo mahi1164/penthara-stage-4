@@ -172,3 +172,17 @@ form button:hover{
 .edit-btn:hover{
   background:#1d4ed8;
 }
+
+.rate-up {
+  color: green;
+  font-weight: 600;
+}
+
+.rate-down {
+  color: red;
+  font-weight: 600;
+}
+
+.rate-unchanged {
+  font-weight: 600;
+}
