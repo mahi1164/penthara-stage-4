@@ -10,6 +10,21 @@ function CurrencySection() {
   const [ratesLoading, setRatesLoading] = useState(true);
   const [ratesError, setRatesError] = useState("");
   const [ratesRetry, setRatesRetry] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  const normalizedSearch = debouncedSearchTerm.trim().toLowerCase();
+
+const filteredRates = Object.entries(rates).filter(
+  ([code]) => {
+    const name = currencies[code] || "";
+
+    return (
+      code.toLowerCase().includes(normalizedSearch) ||
+      name.toLowerCase().includes(normalizedSearch)
+    );
+  }
+);
 
   const loadCurrencies = async () => {
     setLoading(true);
@@ -60,6 +75,16 @@ function CurrencySection() {
     cancelled = true;
   };
 }, [baseCurrency, ratesRetry]);
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearchTerm(searchTerm);
+  }, 300);
+
+  return () => {
+    clearTimeout(timer);
+  };
+}, [searchTerm]);
 
   useEffect(() => {
     loadCurrencies();
@@ -120,6 +145,20 @@ function CurrencySection() {
       </select>
     </div>
 
+    <div className="currency-search">
+  <label htmlFor="currency-search">
+    Search currencies
+  </label>
+
+  <input
+    id="currency-search"
+    type="search"
+    value={searchTerm}
+    onChange={(event) => setSearchTerm(event.target.value)}
+    placeholder="Search by code or name"
+  />
+</div>
+
     {ratesLoading ? (
       <p>Loading latest rates...</p>
     ) : ratesError ? (
@@ -146,7 +185,7 @@ function CurrencySection() {
         </thead>
 
         <tbody>
-          {Object.entries(rates).map(([code, rate]) => (
+          {filteredRates.map(([code, rate]) => (
             <tr key={code}>
               <td>{code}</td>
               <td>{currencies[code] || code}</td>
