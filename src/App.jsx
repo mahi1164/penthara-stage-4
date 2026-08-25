@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import CategorySettings from "./components/CategorySettings";
+import CurrencySection from "./components/CurrencySection";
 import {
   getCurrentMonthExpenses,
   getSpentByCategory,
@@ -450,11 +451,8 @@ categories.forEach((category) => {
     )}
 
   {activeView === "currencies" && (
-  <section className="currency-section">
-    <h2>Currencies</h2>
-    <p>Currency data will appear here.</p>
-  </section>
-)}
+  <CurrencySection />
+  )}
 
   </div>
 );
