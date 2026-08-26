@@ -63,3 +63,46 @@ it("applies only the latest search after the debounce", async () => {
 
   vi.useRealTimers();
 });
+
+it("keeps the latest base currency rates when an older request resolves later", async () => {
+  const usdRequest = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        rates: {
+          EUR: 0.85,
+        },
+      });
+    }, 100);
+  });
+
+  const eurRequest = Promise.resolve({
+    rates: {
+      USD: 1.18,
+    },
+  });
+
+  fetchLatestRates
+    .mockImplementationOnce(() => usdRequest)
+    .mockImplementationOnce(() => eurRequest);
+
+  render(<CurrencySection />);
+
+  const baseSelect = await screen.findByLabelText("Base currency");
+
+  fireEvent.change(baseSelect, {
+    target: { value: "EUR" },
+  });
+
+  await act(async () => {
+    await eurRequest;
+  });
+
+  expect(screen.getByText("1.18")).toBeInTheDocument();
+
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  });
+
+  expect(screen.getByText("1.18")).toBeInTheDocument();
+  expect(screen.queryByText("0.85")).not.toBeInTheDocument();
+});
