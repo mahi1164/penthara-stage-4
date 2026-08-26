@@ -4,6 +4,7 @@ import {
   fetchLatestRates,
   fetchHistoricalRate,
 } from "../utils/currencyApi";
+import { calculatePercentageChange } from "../utils/currencyUtils";
 
 function getDateDaysAgo(days) {
   const date = new Date();
@@ -236,16 +237,12 @@ function CurrencySection() {
       ? 1
       : rates[detailCurrency];
 
-  let percentageChange = null;
+  
 
-  if (
-    typeof todayRate === "number" &&
-    typeof historicalRate === "number" &&
-    historicalRate !== 0
-  ) {
-    percentageChange =
-      ((todayRate - historicalRate) / historicalRate) * 100;
-  }
+const percentageChange = calculatePercentageChange(
+  todayRate,
+  historicalRate
+);
 
   const changeLabel =
     percentageChange === null

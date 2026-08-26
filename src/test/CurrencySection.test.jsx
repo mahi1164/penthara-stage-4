@@ -6,6 +6,8 @@ import {
   fetchLatestRates,
   fetchHistoricalRate,
 } from "../utils/currencyApi";
+import { calculatePercentageChange } from "../utils/currencyUtils";
+
 
 vi.mock("../utils/currencyApi", () => ({
   fetchCurrencies: vi.fn(),
@@ -105,4 +107,11 @@ it("keeps the latest base currency rates when an older request resolves later", 
 
   expect(screen.getByText("1.18")).toBeInTheDocument();
   expect(screen.queryByText("0.85")).not.toBeInTheDocument();
+});
+
+it("calculates the 30-day percentage change correctly", () => {
+  expect(calculatePercentageChange(0.9, 0.8)).toBeCloseTo(12.5);
+  expect(calculatePercentageChange(0.7, 0.8)).toBeCloseTo(-12.5);
+  expect(calculatePercentageChange(0.8, 0)).toBeNull();
+  expect(calculatePercentageChange(null, 0.8)).toBeNull();
 });
