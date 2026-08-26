@@ -34,6 +34,7 @@ function CurrencySection() {
   const [historicalRate, setHistoricalRate] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState("");
+  const [detailRetry, setDetailRetry] = useState(0);
 
   // Load supported currencies
   const loadCurrencies = async () => {
@@ -405,7 +406,15 @@ function CurrencySection() {
         ) : detailError ? (
           <div>
             <p>{detailError}</p>
+                <button
+                    type="button"
+                    onClick={() => setDetailRetry((value) => value + 1)}
+                >
+                Retry
+                </button>
+
           </div>
+
         ) : historicalRate === null ? (
           <p>No historical rate is available.</p>
         ) : typeof todayRate !== "number" ? (
