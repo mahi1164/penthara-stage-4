@@ -480,14 +480,22 @@ function CurrencySection() {
           </thead>
 
           <tbody>
-            {filteredRates.map(([code, rate]) => (
-              <tr key={code}>
-                <td>{code}</td>
-                <td>{currencies[code] || code}</td>
-                <td>{rate}</td>
-              </tr>
-            ))}
-          </tbody>
+  {filteredRates.length === 0 ? (
+    <tr>
+      <td colSpan="3">
+        No currencies match your search.
+      </td>
+    </tr>
+  ) : (
+    filteredRates.map(([code, rate]) => (
+      <tr key={code}>
+        <td>{code}</td>
+        <td>{currencies[code] || code}</td>
+        <td>{rate}</td>
+      </tr>
+    ))
+  )}
+</tbody>
         </table>
       )}
     </section>
