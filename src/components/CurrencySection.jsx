@@ -158,7 +158,7 @@ function CurrencySection() {
     return () => {
       cancelled = true;
     };
-  }, [baseCurrency, detailCurrency]);
+  }, [baseCurrency, detailCurrency, detailRetry]);
 
   // Load the supported currency list once
   useEffect(() => {
