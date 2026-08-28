@@ -211,25 +211,29 @@ function CurrencySection() {
   });
 
   // Converter calculations
-  const numericAmount = Number(amount);
+const numericAmount = Number(amount);
 
-  const sourceRate =
-    sourceCurrency === baseCurrency ? 1 : rates[sourceCurrency];
+const sourceRate =
+  sourceCurrency === baseCurrency ? 1 : rates[sourceCurrency];
 
-  const targetRate =
-    targetCurrency === baseCurrency ? 1 : rates[targetCurrency];
+const targetRate =
+  targetCurrency === baseCurrency ? 1 : rates[targetCurrency];
 
-  let convertedAmount = null;
+let convertedAmount = null;
 
-  if (
-    Number.isFinite(numericAmount) &&
-    numericAmount >= 0 &&
-    sourceRate &&
-    targetRate
-  ) {
-    convertedAmount =
-      (numericAmount * targetRate) / sourceRate;
-  }
+if (
+  Number.isFinite(numericAmount) &&
+  numericAmount > 0 &&
+  typeof sourceRate === "number" &&
+  Number.isFinite(sourceRate) &&
+  sourceRate > 0 &&
+  typeof targetRate === "number" &&
+  Number.isFinite(targetRate) &&
+  targetRate > 0
+) {
+  convertedAmount =
+    (numericAmount * targetRate) / sourceRate;
+}
 
   // Currency detail calculations
   const todayRate =
