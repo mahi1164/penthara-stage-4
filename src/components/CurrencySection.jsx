@@ -45,7 +45,7 @@ function CurrencySection() {
     try {
       const data = await fetchCurrencies();
       setCurrencies(data);
-    } catch (err) {
+    } catch {
       setError("Unable to load currencies.");
     } finally {
       setLoading(false);
@@ -69,7 +69,7 @@ function CurrencySection() {
         }
 
         setRates(data.rates || {});
-      } catch (err) {
+      } catch {
         if (cancelled) {
           return;
         }
@@ -140,7 +140,7 @@ function CurrencySection() {
         }
 
         setHistoricalRate(rate);
-      } catch (err) {
+      } catch  {
         if (cancelled) {
           return;
         }
@@ -223,7 +223,7 @@ let convertedAmount = null;
 
 if (
   Number.isFinite(numericAmount) &&
-  numericAmount > 0 &&
+  numericAmount >= 0 &&
   typeof sourceRate === "number" &&
   Number.isFinite(sourceRate) &&
   sourceRate > 0 &&
