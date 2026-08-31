@@ -7,5 +7,5 @@ export function calculatePercentageChange(todayRate, historicalRate) {
     return null;
   }
 
-  return ((todayRate - historicalRate) / historicalRate) * 100;
+  return ((todayRate - historicalRate) / historicalRate) * 100; // Should divide by historicalRate
 }
